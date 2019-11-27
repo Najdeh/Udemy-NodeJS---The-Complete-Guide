@@ -1,0 +1,86 @@
+----javascript recap----
+
+REPL - Read/Evaluate/Print/Loop ez jelenik meg a terminálban amikor csak arra hogy node+enter
+
+Arrow function: megoldja a .this binding problémáját, ami egyébként egy anonymus functionnél felmerülne.
+így a .this context olyan lesz mintha a functionon kívül adnánk ki!
+
+A referencia típusok csak egy pointerrel mutatnak az objectre, ezért lehet például a const hobbies = [1,2] tömbbe
+belepusholni még egy elemet hiba nélkül, mert a mutató ugyanaz marad, csak a tömb elemei változnak.
+
+immutability: gyakran használt pattern, arra való, hogy ne módosítsuk az eredeti pédányt, hanem másolatot
+hozunk belőle létre, és azzal dolgozunk. Tömb esetén gyakran használt a .slice() method 
+másik megoldás SPREAD OPERATOR: [...eredetiTomb]; object esetén: = {...objektumNeve}
+
+REST OPERATOR: 
+const toArray = (...args) => {
+    return args;
+};
+console.log(toArray(1,2,3,4)); így használva bármennyi paramétert megadhatunk!
+
+OBJECT DESTRUCTURING:
+const person = {
+    name: 'Max',
+    age: 29
+};
+
+----express----
+const express = require('express');
+
+const app = express();
+
+app.use((req, res, next) => {
+    console.log('In the middleware');
+    next();  //ezzel megyünk tovább a következő middlewarere, ha nincs next akkor ezen fog állni.
+});
+
+const printName = ({name}) => {
+    console.log(name); 
+}; //Max
+így tudjuk kivenni a name properyt legegyszerűbben!
+
+Ugyanez method nélkül:
+const {name, age} = person;
+console.log(name, age); // Max, 29
+
+Tömb esetén:
+const hobbies = ['sport', 'cooking'];
+const [hobby1, hobby2] = hobbies;
+console.log(hobby1, hobby2); // sport cooking <--(ez itt már nem array ugyebár, csak sima stringek)
+https://academind.com/learn/javascript/
+
+----NodeJS----
+
+Amikor létrehozunk egy node servert:
+const server = http.createServer((req, res) => {
+    console.log(req);
+});
+    vár egy requestListener callback function-t, ez végig fut amíg a server UP. Bekerül az event loop-ba
+    Ami addig fut ameddig vannak oda regisztrált eventek. Eventet törölni így tudunk: process.exit();
+
+A nodeJS egy szállas non blocking nyelv. Event loop segítségével valósítja meg az asszinkronitást.
+Magyarul az eventloop kezeli a beérkező callback eventeket DE CSAK AZOKAT AMIK GYORSAN LEFUTNAK!
+
+A lassabban lefuto dolgok, például file műveleteka Worker Poolba kerülnek itt már van multithreading
+az op rendszerrel összedolgozva. Ez a feladatokat, a kódunktól függetlenül végzi, csak akkor triggerel egy
+callback et az eventloopba ha végzett a művelettel.
+
+Module.exports lehet:
+module.exports = {
+    key : value,
+    exportálási név : functionNeve
+};
+    vagy:
+ module.exports.expNev = functionNeve;
+ module.exports.someText = 'someText';
+    vaaagy:
+ exports.expNev = functionNeve;
+ exports.someText = 'someText';
+
+ ----NPM----
+Az npm start egy beépített script, amihez ha hozzárendeljük pl az app.js-t akkor npm start paranccsal tudjuk indítani a szervert.
+Viszont ha magunk adunk hozzá nem beépített scripteket a package.json-höz pl "start-server": "node app.js" akkor npm run start-server
+paranccsal fogjuk tudni csak elindítani! Modern forntend frameworkoknél gyakori az ilyen indítóscriptek használata.
+
+---debugger---
+Ezt a videot érdemes visszaneézni a beállításához: Restarting the Debugger Automatically After Editing our App
