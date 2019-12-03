@@ -84,3 +84,24 @@ paranccsal fogjuk tudni csak elindítani! Modern forntend frameworkoknél gyakor
 
 ---debugger---
 Ezt a videot érdemes visszaneézni a beállításához: Restarting the Debugger Automatically After Editing our App
+
+----path---
+Hogyha simán csak így próbálunk meg útvonalat megadni, akkor az op rendszer gyökér könyvtárából indulunk.
+
+router.use('/', (req, res, next) => {
+   res.sendFile('/express/views/shop.html') //Error: ENOENT: no such file or directory, stat 'D:\express\views\shop.html'
+});
+
+Ezért van szükségünk a path csomagra:
+const path = require('path');
+
+router.use('/', (req, res, next) => {
+    res.sendFile(path.join(__dirname, '../' 'views', 'shop.html')); //itt a __dirname mindig a fájl könyvtára ahol kiadjuk.
+});
+Azért fontos hogy így, használjuk mert így linuxon és windowson is fog működni a / \ különbség nem okoz problmát
+
+----static file serving---
+Így tudunk statikus fileokat kiszolgálni pl Js/css 
+app.use(express.static(path.join(__dirname, 'public')));
+ha így adtuk meg akkor a hivatkozási linknél már csak a további path kell megadni tehát:
+<link rel="stylesheet" href="/css/main.css"> //public már nem kell bele
