@@ -1,0 +1,10 @@
+extends layout.pug
+    
+block content
+    if usersContainer.length
+        h4 User List:
+            ul
+                each user in usersContainer
+                    li= user.userName
+    else
+        h4 No users
