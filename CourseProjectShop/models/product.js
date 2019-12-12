@@ -16,8 +16,11 @@ const getProductsFromFile = (cb) => {
 }
 
 module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálunk
-    constructor(t) {                //konstruktor 1 paramétert kap
-        this.title = t;            // a példányosításnál a paraméter lesz a példány.title-je
+    constructor(title, imageUrl,price, description) {                //konstruktor 4 paramétert kap
+        this.title = title;            // a példányosításnál a paraméter lesz a példány.title-je
+        this.imageUrl = imageUrl;            
+        this.price = price;            
+        this.description = description;            
     }
 
     save() {
