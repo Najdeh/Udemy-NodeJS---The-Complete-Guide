@@ -24,6 +24,7 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
     }
 
     save() {
+        this.id = Math.random().toString();
         getProductsFromFile((products) => {
             products.push(this);
             fs.writeFile(p, JSON.stringify(products), (err) => {
@@ -34,5 +35,12 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
 
     static fetchAll(cb) {          //static azért kell mert így a global objectre mutatunk azaz elérjük a products változót
         getProductsFromFile(cb);
+    }
+
+    static findById(id, cb) {
+        getProductsFromFile(products => {
+            const product = products.find(p => p.id === id);
+            cb(product);
+        });
     }
 }
