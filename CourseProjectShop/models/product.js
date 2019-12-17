@@ -25,16 +25,19 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
     }
 
     save() {
-        this.id = Math.random().toString();
         getProductsFromFile((products) => {
             if (this.id) {
-                const existingProductIndex = products.findIndex(prod => prod.id === this.id);
+                const existingProductIndex = products.findIndex(
+                    prod => prod.id === this.id
+                );
                 const updatedProducts = [...products];
                 updatedProducts[existingProductIndex] = this; //a this itt egy productot jelent
                 fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
                     console.log(err);
-                })} else {
-                    products.push(this);
+                });
+            } else {
+                this.id = Math.random().toString();
+                products.push(this);
                 fs.writeFile(p, JSON.stringify(products), (err) => {
                     console.log(err);
                 });
