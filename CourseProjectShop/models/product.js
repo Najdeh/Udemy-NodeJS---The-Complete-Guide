@@ -2,34 +2,43 @@ const fs = require('fs');
 const path = require('path');
 
 const p = path.join(path.dirname(process.mainModule.filename),
-'data',
-'products.json'
+    'data',
+    'products.json'
 );
 
 const getProductsFromFile = (cb) => {
     fs.readFile(p, (err, fileContent) => {
         if (err) {
-          return  cb([]);
+            return cb([]);
         }
-         cb(JSON.parse(fileContent));
+        cb(JSON.parse(fileContent));
     });
 }
 
 module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálunk
-    constructor(title, imageUrl,price, description) {                //konstruktor 4 paramétert kap
+    constructor(id, title, imageUrl, price, description) {                //konstruktor 4 paramétert kap
+        this.id = id;
         this.title = title;            // a példányosításnál a paraméter lesz a példány.title-je
-        this.imageUrl = imageUrl;            
-        this.price = price;            
-        this.description = description;            
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.description = description;
     }
 
     save() {
         this.id = Math.random().toString();
         getProductsFromFile((products) => {
-            products.push(this);
-            fs.writeFile(p, JSON.stringify(products), (err) => {
-                console.log(err);
-            })
+            if (this.id) {
+                const existingProductIndex = products.findIndex(prod => prod.id === this.id);
+                const updatedProducts = [...products];
+                updatedProducts[existingProductIndex] = this; //a this itt egy productot jelent
+                fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+                    console.log(err);
+                })} else {
+                    products.push(this);
+                fs.writeFile(p, JSON.stringify(products), (err) => {
+                    console.log(err);
+                });
+            }
         });
     }
 
