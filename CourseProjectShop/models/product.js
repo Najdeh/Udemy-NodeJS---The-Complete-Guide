@@ -44,6 +44,17 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
             }
         });
     }
+    
+    static deleteById(id) {
+        getProductsFromFile(products => {
+            const updatedProducts = products.filter(prod => prod.id !== id);
+            fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
+                if (!err) {
+                    
+                }
+            });
+        });
+    }
 
     static fetchAll(cb) {          //static azért kell mert így a global objectre mutatunk azaz elérjük a products változót
         getProductsFromFile(cb);
@@ -55,4 +66,5 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
             cb(product);
         });
     }
+
 }
