@@ -123,3 +123,6 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
     }
 }
 
+---Request types---
+GET esetén a params ban küldjük (urlben) az adatot általában  queryString
+POST esetén a bodyban szoktuk küldeni az adatot.
