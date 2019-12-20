@@ -49,8 +49,6 @@ module.exports = class Product {  //létrehozunk egy osztályt amit kiexportálu
     static deleteById(id) {
         getProductsFromFile(products => {
             const product = products.find(prod => prod.id === id);
-            console.log(products);
-            
             const updatedProducts = products.filter(prod => prod.id !== id);
             fs.writeFile(p, JSON.stringify(updatedProducts), (err) => {
                 if (!err) {

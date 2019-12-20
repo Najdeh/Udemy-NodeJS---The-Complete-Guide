@@ -33,10 +33,23 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  res.render('shop/cart', {
-    path: '/cart',
-    pageTitle: 'Your Cart'
-  });
+  cart = Cart.getCart(cart => {     //cart.json tartalma
+    Product.fetchAll(products => {  //product.json tartalma
+      cartProducts = [];            // ezt a tömböt fogom átadni a templatenek
+      for (const product of products) {   //végig megyünk a product tömbön
+        const cartProductData = cart.products.find(prod => prod.id === product.id); //ahol a cartban található ID megyegyezik a product.id val az a product van a cartban
+        if (cartProductData) {
+          cartProducts.push({productData: product, qty : cartProductData.qty}) //a tömbbe amit átadok majd, belerakom a cartban lévő productokat és qty-jét
+        }
+      }
+      res.render('shop/cart', {
+        path: '/cart',
+        pageTitle: 'Your Cart',
+        products: cartProducts    //itt adom át a templatenek
+      });
+    })
+  })
+
 };
 
 exports.postCart = (req, res, next) => {
@@ -45,6 +58,14 @@ exports.postCart = (req, res, next) => {
     Cart.addProcuct(prodId, product.price);
   });
   res.redirect('/cart');
+}
+
+exports.postCartDeleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  Product.findById(prodId, product => {
+    Cart.deleteProduct(prodId, product.price);
+    res.redirect('/cart');
+  });
 }
 
 exports.getOrders = (req, res, next) => {
